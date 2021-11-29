@@ -1,0 +1,54 @@
+
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+   <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+    <link rel="icon" type="image/png" sizes="32x32" href="../../images/favicon-32x32.png">
+    <link rel="preconnect" href="https://fonts.googleapis.com"> 
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin> 
+  <link href="https://fonts.googleapis.com/css2?family=Public+Sans:wght@300;400&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+    <title>login</title>
+    <style>
+      .attribution { font-size: 11px; text-align: center; }
+      .attribution a { color: hsl(228, 45%, 44%); }
+      
+    </style>
+   </head>
+   <body>
+      <header  class="header">
+         <div class="overlay has-fade"></div>
+         <nav class="container container--pall flex flex-jc-sb flex-ai-c">
+            
+           <a href="/" class="header__logo">
+            <h1>Web Manager</h1>
+         </a>
+           <div>
+
+           </div>
+           <a href="index.html" style="position:absolute;left:42%;" class="button header__cta">Go back to home</a>
+           
+           <a href="signup.html"  class="button header__cta">Don't have an account ? SignUp Now!!</a>
+         </nav>  
+      </header>
+    
+
+      <form style="position:absolute;top:30%;left:35%;width:30%" id="loginid" class="login wrapper title-text">
+        <center> <small><span id="error" style="color:red"> </span> </small> </center>
+         <center> <input style="width:70%" name="email" type="text" placeholder=" Email Address" required></center>
+          <br>
+        <center><input style="width:70%" name="password" type="password" placeholder=" Passsword" required></center>
+        <center>
+          <br>
+          <a href="forgetpass.html">ForgetPassword?</a>
+          <br></center>
+          <br>
+        <center><button  type="submit">
+            Login
+          </button></center>
+    </form>
+      <script src="bundle.js"></script>
+   </body>
+</html>
