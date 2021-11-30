@@ -1,6 +1,5 @@
-
 import { initializeApp } from "firebase/app";
-import { getDatabase,ref, set } from "firebase/database"
+import { getFirestore, collection, getDocs, addDoc} from "firebase/firestore"
 import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword, signOut, sendPasswordResetEmail } from "firebase/auth";
 
 const firebaseConfig = {
@@ -17,15 +16,25 @@ const firebaseConfig = {
 initializeApp(firebaseConfig);
 
 const auth = getAuth()
-const db = getDatabase();
-var database_ref = database.ref();
+const db = getFirestore()
+try {
+  const docRef = await addDoc(collection(db, "users"), {
+    first: "Ada",
+    last: "Lovelace",
+    born: 1815
+  });
+  console.log("Document written with ID: ", docRef.id);
+} catch (e) {
+  console.error("Error adding document: ", e);
+}
+
 
 var path = window.location.pathname;
 
 if(path == "/dist/welcome.html"){ 
  const logoutButton = document.querySelector('.logout')
  logoutButton.addEventListener('click', () => {
-   signOut(auth)
+  signOut(auth)
      .then(() => {
        console.log('user signed out')
        window.location.href = "index.html";
@@ -34,29 +43,20 @@ if(path == "/dist/welcome.html"){
        window.alert(err.message)
        console.log(err.message)
      })
- })
-}
 
-else if(path == "/dist/ajayss.html"){
-  const insrtte = document.querySelector('.insrt')
-  insrtte.addEventListener('submit', (e) => {
-   e.preventDefault()
-   const nameboxxe = insrtte.nameboxx.value
-   const rollboxxe = insrtte.nameboxx.value
-   const emailboxxe = insrtte.nameboxx.value
-   set(ref(db, "thestudents/"+rollboxxe),{
-     nameOf: nameboxxe,
-     emailOf: emailboxxe
-   })
-   .then(()=>{
-     console.log("good code");
-     insrtte.reset()
-     window.location.href = ("welcome.html")
-   })
-   .catch((error)=>{
-      console.log("bad try again");
-   }) })
-}
+ })}
+ 
+
+else if (path == "/dist/webcheck.html"){
+const fireButton = document.querySelector('.fire')
+ fireButton.addEventListener('click', (e) => {
+  console.log("came")
+  const colref = collection(db, 'testing')
+  getDocs(colref)
+  .then((snapshot)=>{
+  console.log(snapshot.docs)
+})}
+ )}
 
 else if (path == "/dist/signup.html"){
  const signupForm = document.querySelector('.signup')
@@ -65,13 +65,6 @@ else if (path == "/dist/signup.html"){
    const full_name = signupForm.full_name.value
    const email = signupForm.email.value
    const password = signupForm.password.value
-   var user = auth.currentUser
-   var user_data = 
-    {
-      full_name: full_name,
-      email: email,
-    }
-   // database_ref.child('users/' + user.uid).set(user_data)
    createUserWithEmailAndPassword(auth, email, password)
     .then(cred => {
       console.log('user created:', cred.user)
@@ -130,7 +123,6 @@ else if (path == "/dist/forgetpass.html"){
       }
       )
  }
-
-  )}
+)}
 
 

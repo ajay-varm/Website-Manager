@@ -91,6 +91,9 @@ a, a:visited, a:hover{
 
 // buttons
 button, .button{
+    &col{
+        background-color: red;
+    }
     display: inline-block;
     padding: 0.875rem 2.1875rem;
     background: linear-gradient(To right, $limeGreen, $brightCyan);

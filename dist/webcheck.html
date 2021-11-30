@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="style.css">
+
+    <title>add your website</title>
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/emailjs-com@3/dist/email.min.js"></script>
+
+<script type="text/javascript">
+(function() {
+emailjs.init("user_zQaDBoC3WlS1z4YarWEEk");
+})();
+</script>
+</head>
+<body 
+<header class="header">
+    <div class="overlay has-fade"></div>
+    <nav class="container container--pall flex flex-jc-sb flex-ai-c">
+       
+      <a href="/dist/" class="header__logo">
+        <h1>Web Manager</h1>
+      </a>
+      <div>
+    </nav>
+</header>
+
+    <center>
+        <h1 style ="color: darkblue; position:absolute; left:30%;top:27%; width:30%">Check your website</h1>
+    </center>
+ <center>   <input style =" position:absolute; left:30%;top:40%; width:30%" type= "text" id = "nameofweb" placeholder=" user name for your website" required/> </center><br>
+<center>  <input style =" position:absolute;left:30%;top: 45%; width:30%;" type = "url" id = "weblink" placeholder=" Link of a website for screening" required/> </center><br>
+<center>  <input style =" position:absolute; left:30%;top:50%; width:30%" type = "email" id = "emailnotify" placeholder=" Alerting Email" required/></center> <br><br>
+<center> <button style =" position:absolute; left:30%;top:58%; width:30%"  onclick='return websit();'>Check</button></center>
+<center>
+    <a href="welcome.html" style ="color: darkcyan; position:absolute; left:30%;top:68%; width:30%">Go Back</a>
+</center>
+<script src="bundle.js"></script>
+<script></script>
+
+    <script>
+     function websit(){
+        var givenlink = document.getElementById("weblink").value
+        var myrequest = new Request(givenlink)
+
+        var i,j ;
+       // function check(){
+         //   for(i= 0;i<1;i++)
+          //  {
+            fetch(myrequest).then(function(response){
+            for(j= 0;j<1;j++)
+                {
+                    if(response.status == 200){
+                        console.log(response.status + "running good")
+                        window.location.href = "webgood.html";
+                    }
+                    else{
+                        var tempParams = {
+                        webname: document.getElementById("nameofweb").value,
+                        weblink: document.getElementById("weblink").value,
+                        Email: document.getElementById("emailnotify").value,
+                        statuscode: response.status
+                        } ;
+                        emailjs.send('gmail_mini','gmail_template',tempParams)
+                        .then(function(res){
+                        console.log("success",res.status);
+                        window.location.href = "mailsend.html";
+
+                        //location.reload();
+                        })}
+            }
+            })};//};
+   // }
+    </script>
+
+</body>
+</html>

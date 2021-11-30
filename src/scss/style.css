@@ -199,6 +199,10 @@ button, .button {
   transition: opacity 300ms ease-in-out;
 }
 
+buttoncol, .buttoncol {
+  background-color: red;
+}
+
 button:hover, .button:hover {
   opacity: 0.75;
 }
