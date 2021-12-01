@@ -26,7 +26,7 @@ emailjs.init("user_zQaDBoC3WlS1z4YarWEEk");
       <div>
     </nav>
 </header>
-
+<button  style="position:absolute;left:89%; top:1%" id="fireid" class="fire col">fire</button>
     <center>
         <h1 style ="color: darkblue; position:absolute; left:30%;top:27%; width:30%">Check your website</h1>
     </center>
@@ -38,8 +38,55 @@ emailjs.init("user_zQaDBoC3WlS1z4YarWEEk");
     <a href="welcome.html" style ="color: darkcyan; position:absolute; left:30%;top:68%; width:30%">Go Back</a>
 </center>
 <script src="bundle.js"></script>
-<script></script>
 
+    <script type="module">
+        // Import the functions you need from the SDKs you need
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/9.5.0/firebase-app.js";
+        import { getDatabase, ref, set, child, update, remove} from "https://www.gstatic.com/firebasejs/9.5.0/firebase-database.js"
+        import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword, signOut, sendPasswordResetEmail } from "https://www.gstatic.com/firebasejs/9.5.0/firebase-auth.js";
+        // TODO: Add SDKs for Firebase products that you want to use
+        // https://firebase.google.com/docs/web/setup#available-libraries
+      
+        // Your web app's Firebase configuration
+        // For Firebase JS SDK v7.20.0 and later, measurementId is optional
+        const firebaseConfig = {
+          apiKey: "AIzaSyBxAqhyYs0UDm2NGhZXiI8pEQ9GDiSgDpU",
+          authDomain: "web-logins-8b63b.firebaseapp.com",
+          databaseURL: "https://web-logins-8b63b-default-rtdb.firebaseio.com",
+          projectId: "web-logins-8b63b",
+          storageBucket: "web-logins-8b63b.appspot.com",
+          messagingSenderId: "287483054692",
+          appId: "1:287483054692:web:5f8663a071266ff1e36d71",
+          measurementId: "G-J6HRVNJWCL"
+        };
+      
+        // Initialize Firebase
+        const app = initializeApp(firebaseConfig);
+        const db = getDatabase();
+       // var user = firebase.auth().currentUser;
+        var webname = document.getElementById("nameofweb");
+        var weblink = document.getElementById("weblink");
+        var Email = document.getElementById("emailnotify");
+
+        var firebt = document.getElementById("fireid");
+
+        function InsertData(){
+            set(ref(db, "Users/"+ userUId),{
+                webnamee: webname.value,
+                weblinkk: weblink.value,
+                email: Email.value
+            })
+            .then(()=>{
+                alert("data stored successfullly")
+                window.location.href = "welcome.html";
+
+            })
+            .catch((error)=>{
+                alert(error);
+            })
+        }
+        firebt.addEventListener('click', InsertData);
+      </script>
     <script>
      function websit(){
         var givenlink = document.getElementById("weblink").value

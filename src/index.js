@@ -1,6 +1,6 @@
 import { initializeApp } from "firebase/app";
-import { getFirestore, collection, getDocs, addDoc} from "firebase/firestore"
 import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword, signOut, sendPasswordResetEmail } from "firebase/auth";
+import { getDatabase, ref, set, child, update, remove} from "firebase/database"
 
 const firebaseConfig = {
   apiKey: "AIzaSyBxAqhyYs0UDm2NGhZXiI8pEQ9GDiSgDpU",
@@ -16,17 +16,8 @@ const firebaseConfig = {
 initializeApp(firebaseConfig);
 
 const auth = getAuth()
-const db = getFirestore()
-try {
-  const docRef = await addDoc(collection(db, "users"), {
-    first: "Ada",
-    last: "Lovelace",
-    born: 1815
-  });
-  console.log("Document written with ID: ", docRef.id);
-} catch (e) {
-  console.error("Error adding document: ", e);
-}
+const db = getDatabase();
+
 
 
 var path = window.location.pathname;
@@ -45,18 +36,6 @@ if(path == "/dist/welcome.html"){
      })
 
  })}
- 
-
-else if (path == "/dist/webcheck.html"){
-const fireButton = document.querySelector('.fire')
- fireButton.addEventListener('click', (e) => {
-  console.log("came")
-  const colref = collection(db, 'testing')
-  getDocs(colref)
-  .then((snapshot)=>{
-  console.log(snapshot.docs)
-})}
- )}
 
 else if (path == "/dist/signup.html"){
  const signupForm = document.querySelector('.signup')
@@ -66,11 +45,21 @@ else if (path == "/dist/signup.html"){
    const email = signupForm.email.value
    const password = signupForm.password.value
    createUserWithEmailAndPassword(auth, email, password)
-    .then(cred => {
-      console.log('user created:', cred.user)
-       
-      signupForm.reset()
-      window.location.href = "welcome.html";
+    .then((userUID) => {
+      console.log('user created:'+ userUID);
+    //function  InsertData(){
+        set(ref(db, "Users/"+ userUID),{
+            username: full_name.value,
+            Email: email.value
+        })
+        .then(()=>{
+            alert("data stored successfullly")
+        })
+        .catch((error)=>{
+            alert(error);
+        })
+   // }
+      //signupForm.reset()
     })
     .catch((error) => 
      {
@@ -94,7 +83,7 @@ else if (path == "/dist/login.html"){
      .then(cred => {
        console.log('user logged in:', cred.user)
        loginForm.reset()
-       window.location.href = "welcome.html";
+      // window.location.href = "welcome.html";
      })
      .catch((error) => 
      {
@@ -124,5 +113,10 @@ else if (path == "/dist/forgetpass.html"){
       )
  }
 )}
+else if (path == "/dist/webcheck.html"){
+  const fireButton = document.querySelector('.fire')
+   fireButton.addEventListener('click', () => {
+   alert("working")
+  })}
 
 
