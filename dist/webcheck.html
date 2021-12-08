@@ -26,24 +26,24 @@ emailjs.init("user_zQaDBoC3WlS1z4YarWEEk");
       <div>
     </nav>
 </header>
-<button  style="position:absolute;left:89%; top:1%" id="fireid" class="fire col">fire</button>
+
     <center>
         <h1 style ="color: darkblue; position:absolute; left:30%;top:27%; width:30%">Check your website</h1>
     </center>
  <center>   <input style =" position:absolute; left:30%;top:40%; width:30%" type= "text" id = "nameofweb" placeholder=" user name for your website" required/> </center><br>
 <center>  <input style =" position:absolute;left:30%;top: 45%; width:30%;" type = "url" id = "weblink" placeholder=" Link of a website for screening" required/> </center><br>
 <center>  <input style =" position:absolute; left:30%;top:50%; width:30%" type = "email" id = "emailnotify" placeholder=" Alerting Email" required/></center> <br><br>
-<center> <button style =" position:absolute; left:30%;top:58%; width:30%"  onclick='return websit();'>Check</button></center>
+<center> <button style =" position:absolute; left:30%;top:58%; width:30%" id="addwebsite">Add website</button></center>
 <center>
     <a href="welcome.html" style ="color: darkcyan; position:absolute; left:30%;top:68%; width:30%">Go Back</a>
 </center>
 <script src="bundle.js"></script>
-
     <script type="module">
         // Import the functions you need from the SDKs you need
+        //import { } from 'https://www.gstatic.com/firebasejs/9.5.0/firebase.js'
         import { initializeApp } from "https://www.gstatic.com/firebasejs/9.5.0/firebase-app.js";
         import { getDatabase, ref, set, child, update, remove} from "https://www.gstatic.com/firebasejs/9.5.0/firebase-database.js"
-        import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword, signOut, sendPasswordResetEmail } from "https://www.gstatic.com/firebasejs/9.5.0/firebase-auth.js";
+        import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword, signOut, sendPasswordResetEmail} from "https://www.gstatic.com/firebasejs/9.5.0/firebase-auth.js";
         // TODO: Add SDKs for Firebase products that you want to use
         // https://firebase.google.com/docs/web/setup#available-libraries
       
@@ -61,17 +61,25 @@ emailjs.init("user_zQaDBoC3WlS1z4YarWEEk");
         };
       
         // Initialize Firebase
-        const app = initializeApp(firebaseConfig);
+        initializeApp(firebaseConfig);
+        const auth = getAuth();
         const db = getDatabase();
-       // var user = firebase.auth().currentUser;
+        var user = auth.currentUser;
+        
+
         var webname = document.getElementById("nameofweb");
         var weblink = document.getElementById("weblink");
         var Email = document.getElementById("emailnotify");
 
-        var firebt = document.getElementById("fireid");
+        var firebt = document.getElementById("addwebsite");
 
         function InsertData(){
-            set(ref(db, "Users/"+ userUId),{
+
+           auth.onAuthStateChanged(function(user) {
+            if (user) {
+                console.log(user.uid)
+            set(ref(db, `users/${user.uid}/${webname.value}`),{
+
                 webnamee: webname.value,
                 weblinkk: weblink.value,
                 email: Email.value
@@ -84,8 +92,12 @@ emailjs.init("user_zQaDBoC3WlS1z4YarWEEk");
             .catch((error)=>{
                 alert(error);
             })
-        }
+
+        }})}
+    
         firebt.addEventListener('click', InsertData);
+
+
       </script>
     <script>
      function websit(){

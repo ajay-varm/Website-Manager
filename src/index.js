@@ -28,7 +28,7 @@ if(path == "/dist/welcome.html"){
   signOut(auth)
      .then(() => {
        console.log('user signed out')
-       window.location.href = "index.html";
+        window.location.href = "index.html";
      })
      .catch(err => {
        window.alert(err.message)
@@ -46,28 +46,15 @@ else if (path == "/dist/signup.html"){
    const password = signupForm.password.value
    createUserWithEmailAndPassword(auth, email, password)
     .then((userUID) => {
-      console.log('user created:'+ userUID);
-    //function  InsertData(){
-        set(ref(db, "Users/"+ userUID),{
-            username: full_name.value,
-            Email: email.value
-        })
-        .then(()=>{
-            alert("data stored successfullly")
-        })
-        .catch((error)=>{
-            alert(error);
-        })
-   // }
-      //signupForm.reset()
+      console.log("good");
+      signupForm.reset()
     })
     .catch((error) => 
      {
        document.getElementById("error").innerHTML = "Error:" + " " + error.code
        console.log(error.message)
      }
-     )
-     
+     )   
   })
 }
 
@@ -83,7 +70,7 @@ else if (path == "/dist/login.html"){
      .then(cred => {
        console.log('user logged in:', cred.user)
        loginForm.reset()
-      // window.location.href = "welcome.html";
+       window.location.href = "welcome.html";
      })
      .catch((error) => 
      {
@@ -101,7 +88,7 @@ else if (path == "/dist/forgetpass.html"){
    const email = ForgetForm.email.value
    sendPasswordResetEmail(auth, email)
       .then(() => {
-       // alert("reset link send to your email")
+       alert("reset link send to your email")
         window.location.href = "login.html";
 
       })
