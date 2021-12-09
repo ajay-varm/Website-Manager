@@ -11,7 +11,7 @@
 
 <script type="text/javascript">
 (function() {
-emailjs.init("user_zQaDBoC3WlS1z4YarWEEk");
+emailjs.init("user_pDXfhzYgMYTbrbth331uX");
 })();
 </script>
 </head>
@@ -34,21 +34,17 @@ emailjs.init("user_zQaDBoC3WlS1z4YarWEEk");
 <center>  <input style =" position:absolute;left:30%;top: 45%; width:30%;" type = "url" id = "weblink" placeholder=" Link of a website for screening" required/> </center><br>
 <center>  <input style =" position:absolute; left:30%;top:50%; width:30%" type = "email" id = "emailnotify" placeholder=" Alerting Email" required/></center> <br><br>
 <center> <button style =" position:absolute; left:30%;top:58%; width:30%" id="addwebsite">Add website</button></center>
+<center> <button style =" position:absolute; left:30%;top:88%; width:30%" id="checkstatus">check status</button></center>
 <center>
     <a href="welcome.html" style ="color: darkcyan; position:absolute; left:30%;top:68%; width:30%">Go Back</a>
 </center>
 <script src="bundle.js"></script>
     <script type="module">
-        // Import the functions you need from the SDKs you need
-        //import { } from 'https://www.gstatic.com/firebasejs/9.5.0/firebase.js'
+        
         import { initializeApp } from "https://www.gstatic.com/firebasejs/9.5.0/firebase-app.js";
-        import { getDatabase, ref, set, child, update, remove} from "https://www.gstatic.com/firebasejs/9.5.0/firebase-database.js"
+        import { getDatabase, ref, set, child, update, remove, get} from "https://www.gstatic.com/firebasejs/9.5.0/firebase-database.js"
         import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword, signOut, sendPasswordResetEmail} from "https://www.gstatic.com/firebasejs/9.5.0/firebase-auth.js";
-        // TODO: Add SDKs for Firebase products that you want to use
-        // https://firebase.google.com/docs/web/setup#available-libraries
-      
-        // Your web app's Firebase configuration
-        // For Firebase JS SDK v7.20.0 and later, measurementId is optional
+        
         const firebaseConfig = {
           apiKey: "AIzaSyBxAqhyYs0UDm2NGhZXiI8pEQ9GDiSgDpU",
           authDomain: "web-logins-8b63b.firebaseapp.com",
@@ -64,7 +60,6 @@ emailjs.init("user_zQaDBoC3WlS1z4YarWEEk");
         initializeApp(firebaseConfig);
         const auth = getAuth();
         const db = getDatabase();
-        var user = auth.currentUser;
         
 
         var webname = document.getElementById("nameofweb");
@@ -72,6 +67,7 @@ emailjs.init("user_zQaDBoC3WlS1z4YarWEEk");
         var Email = document.getElementById("emailnotify");
 
         var firebt = document.getElementById("addwebsite");
+        var checkkbt = document.getElementById("checkstatus");
 
         function InsertData(){
 
@@ -96,43 +92,63 @@ emailjs.init("user_zQaDBoC3WlS1z4YarWEEk");
         }})}
     
         firebt.addEventListener('click', InsertData);
+        checkkbt.addEventListener('click', websit);
 
 
-      </script>
-    <script>
-        
-     function websit(){
-        var givenlink = document.getElementById("weblink").value
-        var myrequest = new Request(givenlink)
+      
 
-        var i,j ;
-       // function check(){
-         //   for(i= 0;i<1;i++)
-          //  {
+        function AddItemToTable(websitename,url,mail){
+            var givenlink = url;
+            var myrequest = new Request(givenlink);
             fetch(myrequest).then(function(response){
-            for(j= 0;j<1;j++)
-                {
-                    if(response.status == 200){
-                        console.log(response.status + "running good")
-                        window.location.href = "webgood.html";
-                    }
-                    else{
-                        var tempParams = {
-                        webname: document.getElementById("nameofweb").value,
-                        weblink: document.getElementById("weblink").value,
-                        Email: document.getElementById("emailnotify").value,
-                        statuscode: response.status
+                if(response.status == 200){
+                          console.log(response.status + "running good")}
+                else{
+                    console.log(mail)
+                    var tempParams = {
+                         webname: websitename,
+                         weblink: url,
+                         Email: mail,
+                         statuscode: response.status
+
                         } ;
+                        console.log("sending mail to"+mail)
                         emailjs.send('gmail_mini','gmail_template',tempParams)
                         .then(function(res){
                         console.log("success",res.status);
-                        window.location.href = "mailsend.html";
+                       })
+                       .catch((error)=>{
+                           console.log("error occured  "+error)
+                       })
+                    }
+            })
 
-                        //location.reload();
-                        })}
-            }
-            })};//};
-   // }
+        }
+        function AddAllItemToTable(TheWebsite){
+            console.log("2nd stage start")
+            TheWebsite.forEach(element =>{
+                AddItemToTable(element.webnamee, element.weblinkk, element.email);
+                console.log("2nd stage end")
+            })
+        }
+        
+     function websit(){
+        auth.onAuthStateChanged(function(user) {
+            if (user) {
+                     console.log(user.uid)
+                 const dbRef = ref(db);
+
+                 get(child(dbRef, `users/${user.uid}/`))
+                 .then((snapshot)=>{
+                     var websites = [];
+                     snapshot.forEach(childSnapshot =>{
+                        websites.push(childSnapshot.val());
+                    });
+                    console.log("good done 1 stage")
+                 AddAllItemToTable(websites)
+                 });
+        }})
+     }
     </script>
 
 </body>

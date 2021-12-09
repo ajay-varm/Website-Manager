@@ -11,6 +11,7 @@
   "license": "ISC",
   "dependencies": {
     "cors": "^2.8.5",
+    "emailjs-com": "^3.2.0",
     "firebase": "^9.4.1"
   },
   "devDependencies": {

@@ -18,6 +18,12 @@
         .attribution { font-size: 11px; text-align: center; }
         .attribution a { color: hsl(228, 45%, 44%); }
       </style>
+      <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/emailjs-com@3/dist/email.min.js"></script>
+      <script type="text/javascript">
+        (function() {
+        emailjs.init("user_pDXfhzYgMYTbrbth331uX");
+        })();
+        </script>
 <body>
     <a href="/dist/" class="header__logo">
         <h1>Web Manager</h1>
@@ -25,6 +31,10 @@
     <button  style="background-color: red; position:absolute;left:89%; top:1%" id="logoutid" class="logout">logout</button>
     <a href="webcheck.html" style="position:absolute;left:70%; top:1%"  class="button header__cta">Add website</a>
     <div class="hero__text container--pall"><br><br><br><br><br>
+     
+      <center> <button style =" position:absolute; left:30%;top:18%; width:20%" id="startcheck">Start</button></center>
+      <center> <button style =" position:absolute; left:54%;top:18%; width:20%" id="resumecheck">Resume</button></center>
+
 <div class="container mt-3">
 <table class="table table-dark">
     <thead>
@@ -92,11 +102,11 @@
          trow.appendChild(td2);
          trow.appendChild(td3);
 
-         var ControlDiv = document.createElement("div");
-         ControlDiv.innerHTML = '<button type="button" class="btn btn-primary my-2" data-toggle="modal" data-target="#exampleModalCenter" onclick="FillTboxes('+Sno+')">Delete Record</button>'
-         ControlDiv.innerHTML += '<button type="button" class="btn btn-primary my-2 ml-2" data-toggle="modal" data-target="#exampleModalCenter" onclick="FillTboxes('+Sno+')">Edit Record</button>'
+         //var ControlDiv = document.createElement("div");
+         //ControlDiv.innerHTML = '<button type="button" class="btn btn-primary my-2" data-toggle="modal" data-target="#exampleModalCenter" onclick= "FillTboxes('+Sno+');">Delete Record</button>'
+        // ControlDiv.innerHTML += '<button type="button" class="btn btn-primary my-2 ml-2" data-toggle="modal" data-target="#exampleModalCenter" onclick="FillTboxes('+Sno+');">Edit Record</button>'
 
-         trow.appendChild(ControlDiv);
+        // trow.appendChild(ControlDiv);
          tbody.appendChild(trow);
 
      }
@@ -147,7 +157,8 @@
      const auth = getAuth();
      const db = getDatabase();
 
-     
+     var startbt = document.getElementById("startcheck");
+     var resumebt = document.getElementById("resumecheck");
 
      function GetAllDataOnce(){
 
@@ -164,9 +175,74 @@
                 });
                 AddAllItemsToTable(websites)
             })
+            .catch((error)=>{
+              alert(error);
+          })
      }})}
      window.onload = GetAllDataOnce;
-    
+     function AddItemToTables(websitename,url,mail){
+      var givenlink = url;
+      var myrequest = new Request(givenlink);
+      fetch(myrequest).then(function(response){
+          if(response.status == 200){
+                    console.log(response.status + "running good")}
+          else{
+              console.log(mail)
+              var tempParams = {
+                   webname: websitename,
+                   weblink: url,
+                   Email: mail,
+                   statuscode: response.status
+
+                  } ;
+                  console.log("sending mail to"+mail)
+                  emailjs.send('gmail_mini','gmail_template',tempParams)
+                  .then(function(res){
+                  console.log("success",res.status);
+                 })
+                 .catch((error)=>{
+                     console.log("error occured  "+error)
+                 })
+              }
+      })
+
+  }
+
+     function AddAllItemToTable(TheWebsite){
+      console.log("2nd stage start")
+      TheWebsite.forEach(element =>{
+          AddItemToTables(element.webnamee, element.weblinkk, element.email);
+          console.log("2nd stage end")
+      })
+  }
+
+  let intervalID;
+    startbt.addEventListener("click", function(){
+      console.log("enter 0")
+      
+    intervalID = setInterval(function(){
+        console.log("started..")
+        auth.onAuthStateChanged(function(user) {
+          if (user) {
+                   console.log(user.uid)
+               const dbRef = ref(db);
+
+               get(child(dbRef, `users/${user.uid}/`))
+               .then((snapshot)=>{
+                   var websitess = [];
+                   snapshot.forEach(childSnapshot =>{
+                      websitess.push(childSnapshot.val());
+                  });
+                  console.log("good done 1 stage")
+               AddAllItemToTable(websitess)
+               });
+      }})
+      },30000);
+    })
+    resumebt.addEventListener("click", function (){
+      console.log("stopped succesfully")
+      clearInterval(intervalID);
+    })
  </script>
 
     <script src="bundle.js"></script>
