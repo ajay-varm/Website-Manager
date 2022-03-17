@@ -4,3 +4,9 @@ This was my mini-project in my college, the use of the website was you can regis
 if something happens then it will mail to the respective mail you have given.
 
 I think so many website owners cant be able to keep an eye on their website whether it was running or not for them it will help a alot.
+
+# Getting Started 
+
+If you want to try the project , during testing goto dist folder to launch the website.
+
+Thankyou :)
